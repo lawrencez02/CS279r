@@ -3,29 +3,36 @@
 
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Import bootstrap CSS library for styling -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 <style>
+/* Default background color of tasks in to-do list */
 ul li {
     background-color:lightskyblue !important;
 }
 
+/* Background color of task that user is hovering over in to-do list */
 ul li:hover {
     background-color:lightsteelblue !important;
 }
 
+/* Background color of checked-off tasks in to-do list */
 ul li.checked {
     text-decoration: line-through;
     background-color:lightsteelblue !important;
 }
 
+/* Center header on website */
 #listHeader {
     text-align: center;
 }
 
+/* Make Top, Bottom, and Delete buttons for each task right-align on page */
 .btn {
     float: right;
 }
 
+/* Add spacing between input form and first task in to-do list */
 #taskInput {
     margin-bottom: 25px;
 }
@@ -33,16 +40,19 @@ ul li.checked {
 </head>
 
 <body>
-<!-- Header of website, with form that supports adding new task to the TODO list -->
+<!-- Title of website -->
 <div id="listHeader">
   <h2>To-do list</h2>
 </div>
 
+<!-- Input form used to add tasks to to-do list -->
+<!-- Centered using class defined in Bootstrap CSS library -->
 <div class="row justify-content-center">
     <div class="col-lg-3">
       <div class="input-group">
         <input type="text" id="taskInput" class="form-control" placeholder="What do I need to do?">
         <span class="input-group-btn">
+            <!-- Add button calls JavaScript function defined below that creates a new task -->
             <button onclick="newTask()" class="btn btn-primary" type="button">Add</button>
         </span>
       </div>
@@ -53,8 +63,12 @@ ul li.checked {
 <ul class="list-group list-group-flush" id="tasks">
 </ul>
 
+<!-- Import bootstrap CSS library scripts for styling -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 <script>
+
+// If unordered list is clicked, determines which task was clicked
+// and checks off that specific class by toggling its HTML class to "checked"
 var list = document.querySelector('ul');
 list.addEventListener('click', function(e) {
   if (e.target.tagName === 'LI') {
@@ -62,50 +76,78 @@ list.addEventListener('click', function(e) {
   }
 }, false);
 
+
+// Called by "Add" button and creates a new task and inserts into to-do list
 function newTask() {
+    // Gets the user input value of the task name
     var taskInput = document.getElementById("taskInput")
     var inputValue = taskInput.value;
     if (inputValue == '') {
+        // If the user doesn't type anything but presses "Add", alert them!
         alert("You should write something to do!");
         return;
     }
+    // Create a new list item
     var li = document.createElement("li");
+    // Style the list item with Bootstrap CSS library by assigning it an appropriate HTML class
     li.className = "list-group-item";
+    // Add a text node with text of what the user inputted
     li.appendChild(document.createTextNode(inputValue));
 
-
+    // Create a new delete button for this task
     var deleteButton = document.createElement("button");
+    // Title this delete button with "Delete"
     deleteButton.innerHTML = "Delete";
+    // Style the delete button with Bootstrap CSS library by assigning it an appropriate HTML class
     deleteButton.className = "btn btn-danger";
-
+    // Make clicking the delete button remove the task from the list
     deleteButton.addEventListener("click", function(e) {
         e.target.parentNode.remove()
     });
+    // Add this delete button to this new task
     li.appendChild(deleteButton);
 
+    // Create a new move-to-bottom button for this task
     var moveToBottom = document.createElement("button");
+    // Title this button with "Bottom"
     moveToBottom.innerHTML = "Bottom";
+    // Style the button with Bootstrap CSS library by assigning it an appropriate HTML class
     moveToBottom.className = "btn btn-success";
+    // Make clicking the move-to-bottom button insert the task at the bottom of the to-do list
     moveToBottom.addEventListener("click", function(e) {
+        // Get the list item that needs to be moved
         var itemToMove = e.target.parentNode;
         var list = document.querySelector('ul');
+        // Remove the list item from its current position in the list
         list.removeChild(itemToMove);
+        // And insert it at the end of the list
         list.insertBefore(itemToMove, list.children[-1]);
     })
+    // Add this move-to-bottom button to this new task
     li.appendChild(moveToBottom);
 
+    // Create a new move-to-top button for this task
     var moveToTop = document.createElement("button");
+    // Title this button with "Top"
     moveToTop.innerHTML = "Top";
+    // Style the button with Bootstrap CSS library by assigning it an appropriate HTML class
     moveToTop.className = "btn btn-warning";
+    // Make clicking the move-to-top button insert the task at the top of the to-do list
     moveToTop.addEventListener("click", function(e) {
+        // Get the list item that needs to be moved
         var itemToMove = e.target.parentNode;
         var list = document.querySelector('ul');
+        // Remove the list item from its current position in the list
         list.removeChild(itemToMove);
+        // And insert it at the top of the list
         list.insertBefore(itemToMove, list.children[0]);
     });
+    // Add this move-to-top button to this new task
     li.appendChild(moveToTop);
 
+    // Add the completed list item to the unordered list 
     document.getElementById("tasks").appendChild(li);
+    // Clear the input form 
     taskInput.value = '';
 }
 </script>
